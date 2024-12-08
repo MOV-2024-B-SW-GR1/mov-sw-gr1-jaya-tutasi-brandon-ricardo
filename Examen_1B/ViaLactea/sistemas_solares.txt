@@ -1,0 +1,1 @@
+Sistema_Solar1|1001-01-01|true|9|13245.4|Marte,123.0,123,false,45.0;Tierra,456.0,45,true,37.0
