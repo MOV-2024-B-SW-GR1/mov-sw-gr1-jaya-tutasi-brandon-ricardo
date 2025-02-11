@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="saludo1">condicion 1</string>
+    <string name="saludo3">condicion 3</string>
+</resources>
