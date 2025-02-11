@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainSistemaSolar">
+
+    <EditText
+        android:id="@+id/inputIDSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="ID"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/btnCrearSS"
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="@+id/btnBuscarSS"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/inputNPlanetasSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="N° Planetas"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/inputMasDeUnSolSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputMasDeUnSolSS"
+        app:layout_constraintTop_toBottomOf="@+id/inputMasDeUnSolSS" />
+
+    <EditText
+        android:id="@+id/inputDistanciaCentroSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Distancia Centro"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/inputNPlanetasSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputNPlanetasSS"
+        app:layout_constraintTop_toBottomOf="@+id/inputNPlanetasSS" />
+
+    <Switch
+        android:id="@+id/inputMasDeUnSolSS"
+        android:layout_width="208dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Mas De Un Sol"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/inputFechaDescubrimientoSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputFechaDescubrimientoSS"
+        app:layout_constraintTop_toBottomOf="@+id/inputFechaDescubrimientoSS" />
+
+    <EditText
+        android:id="@+id/inputFechaDescubrimientoSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Fecha Descubrimiento"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/inputNombreSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputNombreSS"
+        app:layout_constraintTop_toBottomOf="@+id/inputNombreSS" />
+
+    <EditText
+        android:id="@+id/inputNombreSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/input_nombre"
+        app:layout_constraintEnd_toEndOf="@+id/inputIDSS"
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="@+id/inputIDSS"
+        app:layout_constraintTop_toBottomOf="@+id/inputIDSS" />
+
+    <Button
+        android:id="@+id/btnEliminarSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Eliminar"
+        app:layout_constraintEnd_toEndOf="@+id/btnCrearSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnCrearSS"
+        app:layout_constraintTop_toBottomOf="@+id/btnCrearSS" />
+
+    <Button
+        android:id="@+id/btnEditarSS"
+        android:layout_width="97dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="36dp"
+        android:text="Editar"
+        app:layout_constraintEnd_toEndOf="@+id/btnBuscarSS"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnBuscarSS"
+        app:layout_constraintTop_toBottomOf="@+id/btnBuscarSS" />
+
+    <Button
+        android:id="@+id/btnCrearSS"
+        android:layout_width="99dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="104dp"
+        android:text="Crear"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBuscarSS"
+        app:layout_constraintStart_toEndOf="@+id/btnBuscarSS"
+        app:layout_constraintTop_toTopOf="@+id/btnBuscarSS"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnBuscarSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.475" />
+
+    <Button
+        android:id="@+id/btnListarSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Listar"
+        app:layout_constraintBottom_toBottomOf="@+id/btnEditarSS"
+        app:layout_constraintStart_toEndOf="@+id/btnEditarSS"
+        app:layout_constraintTop_toTopOf="@+id/btnEditarSS"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TableLayout
+        android:id="@+id/tableLayoutSS"
+        android:layout_width="409dp"
+        android:layout_height="256dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnEliminarSS"
+        app:layout_constraintStart_toStartOf="@+id/btnEditarSS">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
