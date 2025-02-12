@@ -11,7 +11,9 @@ class SistemaSolar (
     var fechaDescubrimiento: LocalDate,
     var masDeUnSol: Boolean,
     var numeroDePlanetas: Int,
-    var distanciaAlCentro: Double
+    var distanciaAlCentro: Double,
+    val latitud: Double,  // 🔹 Nueva propiedad
+    val longitud: Double  // 🔹 Nueva propiedad
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),  // 🔹 Leer ID
@@ -19,16 +21,20 @@ class SistemaSolar (
         LocalDate.parse(parcel.readString(), DateTimeFormatter.ISO_DATE),  // 🔹 Leer fecha correctamente
         parcel.readByte() != 0.toByte(),
         parcel.readInt(),
+        parcel.readDouble(),
+        parcel.readDouble(),
         parcel.readDouble()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)  // 🔹 Guardar ID
         parcel.writeString(nombre)
-        parcel.writeString(fechaDescubrimiento.format(DateTimeFormatter.ISO_DATE))  // 🔹 Guardar fecha correctamente
+        parcel.writeString(fechaDescubrimiento.toString())  // 🔹 Guardar fecha correctamente
         parcel.writeByte(if (masDeUnSol) 1 else 0)
         parcel.writeInt(numeroDePlanetas)
         parcel.writeDouble(distanciaAlCentro)
+        parcel.writeDouble(latitud)  // 🔹 Guardamos latitud
+        parcel.writeDouble(longitud) // 🔹 Guardamos longitud
     }
 
     override fun describeContents(): Int {

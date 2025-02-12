@@ -13,19 +13,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MainSistemaSolar : AppCompatActivity() {
+    private lateinit var inputID: EditText
+    private lateinit var inputNombre: EditText
+    private lateinit var inputFechaDescubrimiento: EditText
+    private lateinit var inputNPlanetas: EditText
+    private lateinit var inputDistanciaCentro: EditText
+    private lateinit var inputMasDeUnSol: Switch
+    private lateinit var inputLatitud: EditText
+    private lateinit var inputLongitud: EditText
+    private lateinit var dbHelper: ESqliteHelperSistemaSolar
+
     fun mostrarSnackbar(texto: String) {
-        val snack = Snackbar.make(
-            findViewById(R.id.main),
-            texto,
-            Snackbar.LENGTH_INDEFINITE
-        )
-        snack.show()
+        Snackbar.make(findViewById(R.id.main), texto, Snackbar.LENGTH_LONG).show()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,152 +41,195 @@ class MainSistemaSolar : AppCompatActivity() {
             insets
         }
 
-        val botonListarBDD = findViewById<Button>(R.id.btnListarSS)
+        // Inicialización de vistas
+        inputID = findViewById(R.id.inputIDSS)
+        inputNombre = findViewById(R.id.inputNombreSS)
+        inputFechaDescubrimiento = findViewById(R.id.inputFechaDescubrimientoSS)
+        inputNPlanetas = findViewById(R.id.inputNPlanetasSS)
+        inputDistanciaCentro = findViewById(R.id.inputDistanciaCentroSS)
+        inputMasDeUnSol = findViewById(R.id.inputMasDeUnSolSS)
+        inputLatitud = findViewById(R.id.inputLatitudSS)
+        inputLongitud = findViewById(R.id.inputLongitudSS)
+
+        dbHelper = ESqliteHelperSistemaSolar(this)
+
+        // Botón Listar Sistemas Solares
+        findViewById<Button>(R.id.btnListarSS).setOnClickListener {
+            listarSistemasSolares()
+        }
+
+        // Botón Buscar Sistema Solar
+        findViewById<Button>(R.id.btnBuscarSS).setOnClickListener {
+            buscarSistemaSolar()
+        }
+
+        // Botón Crear Sistema Solar
+        findViewById<Button>(R.id.btnCrearSS).setOnClickListener {
+            crearSistemaSolar()
+        }
+
+        // Botón Eliminar Sistema Solar
+        findViewById<Button>(R.id.btnEliminarSS).setOnClickListener {
+            eliminarSistemaSolar()
+        }
+
+        // Botón Editar Sistema Solar
+        findViewById<Button>(R.id.btnEditarSS).setOnClickListener {
+            actualizarSistemaSolar()
+        }
+    }
+
+    private fun listarSistemasSolares() {
         val tableLayout = findViewById<TableLayout>(R.id.tableLayoutSS)
-        botonListarBDD.setOnClickListener {
-            tableLayout.removeAllViews()
-            val listaSistemas = ESqliteHelperSistemaSolar(this).listarSistemasSolares()
-            if (listaSistemas.isNotEmpty()) {
-                for (sistema in listaSistemas) {
-                    val tableRow = TableRow(this)
-                    val textID = TextView(this)
-                    textID.text = sistema.id.toString()
-                    textID.gravity = Gravity.CENTER
+        tableLayout.removeAllViews()  // Limpiar la tabla antes de volver a llenarla
+        val listaSistemas = dbHelper.listarSistemasSolares()
 
-                    val textNombre = TextView(this)
-                    textNombre.text = sistema.nombre
-                    textNombre.gravity = Gravity.CENTER
+        if (listaSistemas.isNotEmpty()) {
+            for (sistema in listaSistemas) {
+                val tableRow = TableRow(this)
 
-                    val textFecha = TextView(this)
-                    textFecha.text = sistema.fechaDescubrimiento.toString()
-                    textFecha.gravity = Gravity.CENTER
+                val textID = TextView(this)
+                textID.text = sistema.id.toString()
+                textID.gravity = Gravity.CENTER
 
-                    val textMasDeUnSol = TextView(this)
-                    textMasDeUnSol.text = if (sistema.masDeUnSol) "Sí" else "No"
-                    textMasDeUnSol.gravity = Gravity.CENTER
+                val textNombre = TextView(this)
+                textNombre.text = sistema.nombre
+                textNombre.gravity = Gravity.CENTER
 
-                    val textNumPlanetas = TextView(this)
-                    textNumPlanetas.text = sistema.numeroDePlanetas.toString()
-                    textNumPlanetas.gravity = Gravity.CENTER
+                val textFecha = TextView(this)
+                textFecha.text = sistema.fechaDescubrimiento.toString()
+                textFecha.gravity = Gravity.CENTER
 
-                    val textDistancia = TextView(this)
-                    textDistancia.text = sistema.distanciaAlCentro.toString()
-                    textDistancia.gravity = Gravity.CENTER
+                val textMasDeUnSol = TextView(this)
+                textMasDeUnSol.text = if (sistema.masDeUnSol) "Sí" else "No"
+                textMasDeUnSol.gravity = Gravity.CENTER
 
-                    tableRow.addView(textID)
-                    tableRow.addView(textNombre)
-                    tableRow.addView(textFecha)
-                    tableRow.addView(textMasDeUnSol)
-                    tableRow.addView(textNumPlanetas)
-                    tableRow.addView(textDistancia)
-                    tableLayout.addView(tableRow)
-                }
+                val textNumPlanetas = TextView(this)
+                textNumPlanetas.text = sistema.numeroDePlanetas.toString()
+                textNumPlanetas.gravity = Gravity.CENTER
+
+                val textDistancia = TextView(this)
+                textDistancia.text = sistema.distanciaAlCentro.toString()
+                textDistancia.gravity = Gravity.CENTER
+
+                val textLatitud = TextView(this)
+                textLatitud.text = sistema.latitud.toString()
+                textLatitud.gravity = Gravity.CENTER
+
+                val textLongitud = TextView(this)
+                textLongitud.text = sistema.longitud.toString()
+                textLongitud.gravity = Gravity.CENTER
+
+                // Añadir las vistas de la tabla
+                tableRow.addView(textID)
+                tableRow.addView(textNombre)
+                tableRow.addView(textFecha)
+                tableRow.addView(textMasDeUnSol)
+                tableRow.addView(textNumPlanetas)
+                tableRow.addView(textDistancia)
+                tableRow.addView(textLatitud)
+                tableRow.addView(textLongitud)
+                tableLayout.addView(tableRow)
+            }
+        } else {
+            mostrarSnackbar("No hay sistemas solares registrados.")
+        }
+    }
+
+    private fun buscarSistemaSolar() {
+        try {
+            val id = inputID.text.toString().toInt()
+            val sistemaSolar = dbHelper.consultarSistemaSolarPorId(id)
+
+            if (sistemaSolar != null) {
+                inputNombre.setText(sistemaSolar.nombre)
+                inputFechaDescubrimiento.setText(sistemaSolar.fechaDescubrimiento.toString())
+                inputMasDeUnSol.isChecked = sistemaSolar.masDeUnSol
+                inputNPlanetas.setText(sistemaSolar.numeroDePlanetas.toString())
+                inputDistanciaCentro.setText(sistemaSolar.distanciaAlCentro.toString())
+                inputLatitud.setText(sistemaSolar.latitud.toString())
+                inputLongitud.setText(sistemaSolar.longitud.toString())
+                mostrarSnackbar("Sistema solar ${sistemaSolar.nombre} encontrado.")
             } else {
-                mostrarSnackbar("No hay sistemas solares registrados.")
+                mostrarSnackbar("Sistema solar no encontrado.")
             }
+        } catch (e: Exception) {
+            mostrarSnackbar("ID inválido.")
         }
+    }
 
-        val botonBuscarBDD = findViewById<Button>(R.id.btnBuscarSS)
-        botonBuscarBDD.setOnClickListener {
-            val id = findViewById<EditText>(R.id.inputIDSS)
-            val sistemaSolar = ESqliteHelperSistemaSolar(this).consultarSistemaSolarPorId(id.text.toString().toInt())
+    private fun crearSistemaSolar() {
+        try {
+            val nombre = inputNombre.text.toString()
+            val fechaDescubrimiento = LocalDate.parse(inputFechaDescubrimiento.text.toString(), DateTimeFormatter.ISO_DATE)
+            val tieneMasDeUnSol = inputMasDeUnSol.isChecked
+            val numeroDePlanetas = inputNPlanetas.text.toString().toInt()
+            val distanciaAlCentro = inputDistanciaCentro.text.toString().toDouble()
+            val latitud = inputLatitud.text.toString().toDouble()
+            val longitud = inputLongitud.text.toString().toDouble()
 
+            val respuesta = dbHelper.crearSistemaSolar(nombre, fechaDescubrimiento, tieneMasDeUnSol, numeroDePlanetas, distanciaAlCentro, latitud, longitud)
 
-            if (sistemaSolar == null) {
-                id.setText("")
-                findViewById<EditText>(R.id.inputNombreSS).setText("")
-                findViewById<EditText>(R.id.inputFechaDescubrimientoSS).setText("")
-                findViewById<Switch>(R.id.inputMasDeUnSolSS).isChecked = false
-                findViewById<EditText>(R.id.inputNPlanetasSS).setText("")
-                findViewById<EditText>(R.id.inputDistanciaCentroSS).setText("")
-                mostrarSnackbar("Sistema solar no encontrado")
+            if (respuesta) {
+                mostrarSnackbar("Sistema solar creado")
+                limpiarCampos()
             } else {
-                findViewById<EditText>(R.id.inputNombreSS).setText(sistemaSolar.nombre)
-                findViewById<EditText>(R.id.inputFechaDescubrimientoSS).setText(sistemaSolar.fechaDescubrimiento.toString())
-                findViewById<Switch>(R.id.inputMasDeUnSolSS).isChecked = sistemaSolar.masDeUnSol
-                findViewById<EditText>(R.id.inputNPlanetasSS).setText(sistemaSolar.numeroDePlanetas.toString())
-                findViewById<EditText>(R.id.inputDistanciaCentroSS).setText(sistemaSolar.distanciaAlCentro.toString())
-                mostrarSnackbar("Sistema solar ${sistemaSolar.nombre} encontrado")
+                mostrarSnackbar("Fallo al crear el sistema solar")
             }
+        } catch (e: Exception) {
+            mostrarSnackbar("Error en la entrada de datos. Verifica los valores ingresados.")
         }
+    }
 
-        val botonCrearBDD = findViewById<Button>(R.id.btnCrearSS)
-        botonCrearBDD.setOnClickListener {
-            val nombre = findViewById<EditText>(R.id.inputNombreSS)
-            val fechaDescubrimiento = findViewById<EditText>(R.id.inputFechaDescubrimientoSS)
-            val tieneMasDeUnSol = findViewById<Switch>(R.id.inputMasDeUnSolSS)
-            val numeroDePlanetas = findViewById<EditText>(R.id.inputNPlanetasSS)
-            val distanciaAlCentro = findViewById<EditText>(R.id.inputDistanciaCentroSS)
-
-            try {
-                val fecha = LocalDate.parse(fechaDescubrimiento.text.toString(), DateTimeFormatter.ISO_DATE)
-
-                val respuesta = ESqliteHelperSistemaSolar(this).crearSistemaSolar(
-                    nombre.text.toString(),
-                    fecha,
-                    tieneMasDeUnSol.isChecked,
-                    numeroDePlanetas.text.toString().toInt(),
-                    distanciaAlCentro.text.toString().toDouble()
-                )
-
-                if (respuesta) {
-                    mostrarSnackbar("Sistema solar creado")
-                    nombre.setText("")
-                    fechaDescubrimiento.setText("")
-                    tieneMasDeUnSol.isChecked = false
-                    numeroDePlanetas.setText("")
-                    distanciaAlCentro.setText("")
-                } else {
-                    mostrarSnackbar("Fallo al crear el sistema solar")
-                }
-            } catch (e: Exception) {
-                mostrarSnackbar("Error en la fecha. Usa el formato YYYY-MM-DD")
-            }
-        }
-
-        val botonEliminarBDD = findViewById<Button>(R.id.btnEliminarSS)
-        botonEliminarBDD.setOnClickListener {
-            val id = findViewById<EditText>(R.id.inputIDSS)
-
-            val respuesta = ESqliteHelperSistemaSolar(this).eliminarSistemaSolar(id.text.toString().toInt())
+    private fun eliminarSistemaSolar() {
+        try {
+            val id = inputID.text.toString().toInt()
+            val respuesta = dbHelper.eliminarSistemaSolar(id)
 
             if (respuesta) {
                 mostrarSnackbar("Sistema solar eliminado")
-                id.setText("")
+                inputID.setText("")
             } else {
                 mostrarSnackbar("No encontrado")
             }
+        } catch (e: Exception) {
+            mostrarSnackbar("ID inválido.")
         }
+    }
 
-        val botonActualizarBDD = findViewById<Button>(R.id.btnEditarSS)
-        botonActualizarBDD.setOnClickListener {
-            val id = findViewById<EditText>(R.id.inputIDSS)
-            val nombre = findViewById<EditText>(R.id.inputNombreSS)
-            val fechaDescubrimiento = findViewById<EditText>(R.id.inputFechaDescubrimientoSS)
-            val tieneMasDeUnSol = findViewById<Switch>(R.id.inputMasDeUnSolSS)
-            val numeroDePlanetas = findViewById<EditText>(R.id.inputNPlanetasSS)
-            val distanciaAlCentro = findViewById<EditText>(R.id.inputDistanciaCentroSS)
+    private fun actualizarSistemaSolar() {
+        try {
+            val id = inputID.text.toString().toInt()
+            val nombre = inputNombre.text.toString()
+            val fechaDescubrimiento = LocalDate.parse(inputFechaDescubrimiento.text.toString(), DateTimeFormatter.ISO_DATE)
+            val tieneMasDeUnSol = inputMasDeUnSol.isChecked
+            val numeroDePlanetas = inputNPlanetas.text.toString().toInt()
+            val distanciaAlCentro = inputDistanciaCentro.text.toString().toDouble()
+            val latitud = inputLatitud.text.toString().toDouble()
+            val longitud = inputLongitud.text.toString().toDouble()
 
-            val respuesta = ESqliteHelperSistemaSolar(this).actualizarSistemaSolar(
-                id.text.toString().toInt(),
-                nombre.text.toString(),
-                LocalDate.parse(fechaDescubrimiento.text.toString(), DateTimeFormatter.ISO_DATE),
-                tieneMasDeUnSol.isChecked,
-                numeroDePlanetas.text.toString().toInt(),
-                distanciaAlCentro.text.toString().toDouble()
-            )
+            val respuesta = dbHelper.actualizarSistemaSolar(id, nombre, fechaDescubrimiento, tieneMasDeUnSol, numeroDePlanetas, distanciaAlCentro, latitud, longitud)
 
             if (respuesta) {
                 mostrarSnackbar("Sistema solar actualizado")
-                id.setText("")
-                nombre.setText("")
-                fechaDescubrimiento.setText("")
-                tieneMasDeUnSol.isChecked = false
-                numeroDePlanetas.setText("")
-                distanciaAlCentro.setText("")
+                limpiarCampos()
+                listarSistemasSolares()  // Actualizar la tabla con los datos modificados
             } else {
                 mostrarSnackbar("Fallo")
             }
+        } catch (e: Exception) {
+            mostrarSnackbar("Error en la entrada de datos.")
         }
+    }
+
+    private fun limpiarCampos() {
+        inputID.setText("")
+        inputNombre.setText("")
+        inputFechaDescubrimiento.setText("")
+        inputNPlanetas.setText("")
+        inputDistanciaCentro.setText("")
+        inputMasDeUnSol.isChecked = false
+        inputLatitud.setText("")
+        inputLongitud.setText("")
     }
 }
